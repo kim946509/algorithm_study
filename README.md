@@ -47,11 +47,10 @@
 
 ### 문제 풀이
 - <a href="https://github.com/kim946509/algorithm_study/main/picked.md"><b>[이주의 문제]</b></a>를 풀이한다.
-- 추가 1문제는 난이도 높은 문제로 선정하며, 필수는 아니다.
+- 1문제는 대표 문제로 선정하며, 매주 풀이과정을 공유한다.
 <br/>
 
 ## 🗓 일정표
-- 6번째 문제는 선택에 따라 풀이한다.
 <br>
 <details>
   <summary>일정표 열기</summary>
@@ -69,39 +68,29 @@
 
 ## ✅ 참여 방법
 1. 이 저장소에 주차별로 폴더를 생성한다.
-2. 생성된 원격 저장소에 `github ID`로 폴더를 생성한다.
-3. 생성된 폴더에 자신의 소스코드를 `push` 한다.
+2. 해당 주차 폴더에 김대연, 박규원 폴더를 추가한다.
+3. 생성된 폴더에 자신의 소스코드를 `push` 한다. (파일명은 '[플랫폼]_문제번호'로 한다. ex-boj_1975.py)
 4. 이때 `commit 규칙`을 지키도록한다!
-5. 원본 저장소로 `Pull Request`를 한다.
-6. 다른 사람들의 PR을 보고 자유롭게 코드리뷰를 한다.
-7. ***주의!! 기존 폴더를 지우면 안됩니다!!*** 개인 폴더 내부만 수정해주세요 :)
-8. [오픈톡방](https://open.kakao.com/o/gWQkZKxf)에서 모르는 내용 물어보세요 :)
+5. 다른 사람들의 코드를 보고 자유롭게 코드리뷰를 한다.
 
 <br />
 <br />
 
 ## ✅ Repository 폴더 구조
 
-- `Github ID/소스코드` ([플랫폼]_문제번호_문제이름.py)
-
-### 💡 예시
-- `only-juun/[BOJ]_1000_A+B.py`
+- `Github ID/0주차` ([플랫폼]_문제번호_문제이름.py)
 
 <br/>
 
 ## ✅ commit 컨벤션
-- commit 태그: [플랫폼]_문제번호_문제이름
+- commit 태그: 0주자_[플랫폼]_문제번호_문제이름
 
 ### 💡 commit 예시
 
-- `feat: [BOJ]_1000_A+B`
+- `feat: 1주차_BOJ_1000_A+B`
 
 - description: (option)
 
-### 💡 commit 명령어 예시
-```
-git commit -m "[BOJ]_1000_A+B" -m "(option)"
-```
 
 ### 💡 commit 태그
 
@@ -149,10 +138,3 @@ git commit -m "[BOJ]_1000_A+B" -m "(option)"
 
 <br />
 <br />
-
-해당 README는 다음 레포지토리를 참고해서 제작하였습니다.
-
-- [알고리즘 및 코딩 테스트 문제 풀이 챌린지 100](https://github.com/ellynhan/challenge100-codingtest-study)
-- [알고리즘 및 코딩 테스트 문제 풀이](https://github.com/Seongho0503/Algo_Study)
-- [코딩테스트 기출 문제 풀이 및 업로드 Repository](https://github.com/CodeTest-StudyGroup/Code-Test-Study)
-- [Algorithm Study](https://github.com/b1urrrr/Algorithm-Study)
