@@ -28,7 +28,7 @@ class Main {
         }
 
         for (int i = 1; i <= n; i++) {
-            graph.get(i).sort(Comparator.naturalOrder());
+            graph.get(i).sort(Comparator.natura[lOrder());
         }
 
         Deque<Integer> stack = new ArrayDeque<Integer>();
