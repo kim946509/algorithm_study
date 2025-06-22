@@ -2,10 +2,13 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-    private static PriorityQueue<Integer> pq;
     private static int n;
     private static int m;
+    private static int x;
+
     private static List<Node>[] graph;
+    private static List<Node>[] reverseGraph;
+
     private static int[] cost;
     private static int[] beforeVisitNode;
 
@@ -24,10 +27,13 @@ class Main {
         }
     }
 
-    private static void dijkstra(int start, int end) {
+    private static int[] dijkstra(int start, List<Node>[] graph) {
+        int[] cost = new int[n + 1];
+        Arrays.fill(cost, Integer.MAX_VALUE);
         PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.offer(new Node(start, 0));
         cost[start] = 0;
+
         while (!pq.isEmpty()) {
             Node current = pq.poll();
             int currentVertex = current.vertex;
@@ -35,69 +41,55 @@ class Main {
 
             if (currentCost > cost[currentVertex])
                 continue;
-            if (currentVertex == end) {
-                return;
-            }
+
             for (Node neighbor : graph[currentVertex]) {
-                int newCost = cost[currentVertex] + neighbor.cost;
+                int newCost = currentCost + neighbor.cost;
                 int newVertex = neighbor.vertex;
                 if (newCost < cost[newVertex]) {
                     cost[newVertex] = newCost;
                     pq.offer(new Node(newVertex, newCost));
-                    beforeVisitNode[newVertex] = currentVertex;
                 }
             }
         }
+        return cost;
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        m = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        x = Integer.parseInt(st.nextToken());
+
         graph = new ArrayList[n + 1];
+        reverseGraph = new ArrayList[n + 1];
 
         for (int i = 1; i <= n; i++) {
             graph[i] = new ArrayList<>();
+            reverseGraph[i] = new ArrayList<>();
         }
-        cost = new int[n + 1];
-        Arrays.fill(cost, Integer.MAX_VALUE);
-        beforeVisitNode = new int[n + 1];
 
-        StringTokenizer st;
-        for (int i = 1; i <= m; i++) {
+        for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int from = Integer.parseInt(st.nextToken());
             int to = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
-            graph[from].add(new Node(to, cost));
+            int time = Integer.parseInt(st.nextToken());
+            graph[from].add(new Node(to, time));
+            reverseGraph[to].add(new Node(from, time));
         }
 
-        st = new StringTokenizer(br.readLine());
-        int start = Integer.parseInt(st.nextToken());
-        int end = Integer.parseInt(st.nextToken());
+        // X → i (돌아갈 때)
+        int[] fromX = dijkstra(x, graph);
 
-        dijkstra(start, end);
-        // for (int i = 1; i <= n; i++) {
-        // System.out.printf("cost %d: %d\n", i, cost[i]);
-        // }
-        Deque<Integer> stack = new ArrayDeque<>();
-        int cur = end;
-        stack.add(cur);
+        // i → X (갈 때) : 역방향 그래프에서 다익스트라
+        int[] toX = dijkstra(x, reverseGraph);
 
-        while (true) {
-            if (beforeVisitNode[cur] == 0)
-                break;
-            stack.add(beforeVisitNode[cur]);
-            cur = beforeVisitNode[cur];
+        int maxRoundTrip = 0;
+        for (int i = 1; i <= n; i++) {
+            int roundTrip = toX[i] + fromX[i];
+            maxRoundTrip = Math.max(maxRoundTrip, roundTrip);
         }
 
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        bw.write(cost[end] + "\n");
-        bw.write(stack.size() + "\n");
-        while (!stack.isEmpty()) {
-            bw.write(stack.pollLast() + " ");
-        }
-        bw.flush();
-
+        System.out.println(maxRoundTrip);
     }
 }
