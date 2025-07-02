@@ -1,56 +1,71 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        int N = Integer.parseInt(st.nextToken()); // 동굴의 길이
-        int H = Integer.parseInt(st.nextToken()); // 동굴의 높이
-        
-        int[] bottom = new int[H + 1]; // 석순 (아래에서 위로)
-        int[] top = new int[H + 1];    // 종유석 (위에서 아래로)
-        
-        // 입력 처리
-        for (int i = 0; i < N / 2; i++) {
-            bottom[Integer.parseInt(br.readLine())]++; // 석순 높이
-            top[Integer.parseInt(br.readLine())]++;   // 종유석 높이
-        }
-        
-        // 누적합 계산
-        int[] bottomSum = new int[H + 1];
-        int[] topSum = new int[H + 1];
-        
-        // 석순: 높이 1부터 H까지 누적
-        for (int i = 1; i <= H; i++) {
-            bottomSum[i] = bottomSum[i - 1] + bottom[i];
-        }
-        
-        // 종유석: 높이 H부터 1까지 누적
-        for (int i = H - 1; i >= 1; i--) {
-            topSum[i] = topSum[i + 1] + top[i];
-        }
-        
-        // 최소 장애물 수와 해당 높이 개수 계산
-        int minObstacles = Integer.MAX_VALUE;
-        int count = 0;
-        
-        // 높이 1부터 H까지 확인
-        for (int h = 1; h <= H; h++) {
-            // 해당 높이에서 부딪히는 장애물 수
-            // 석순: 높이 h 이상, 종유석: 높이 H-h+1 이상
-            int obstacles = bottomSum[H] - bottomSum[h - 1] + topSum[H - h + 1];
-            
-            if (obstacles < minObstacles) {
-                minObstacles = obstacles;
-                count = 1;
-            } else if (obstacles == minObstacles) {
-                count++;
+
+        int n = Integer.parseInt(st.nextToken());
+        int h = Integer.parseInt(st.nextToken());
+
+        int[] s = new int[n/2];
+        int[] j = new int[n/2];
+        int s_idx=0;
+        int j_idx=0;
+
+        //석순과 종유석 초기화
+        for(int i = 0; i<n; i++){
+            if(i%2==0){
+                s[s_idx++] = Integer.parseInt(br.readLine()); //석순 초기화
+            }else{
+                j[j_idx++] = Integer.parseInt(br.readLine()); //종유석 초기화
             }
         }
-        
-        // 결과 출력
-        System.out.println(minObstacles + " " + count);
+
+        Arrays.sort(s);
+        Arrays.sort(j);
+
+        int min = Integer.MAX_VALUE;
+        int answer = 0;
+
+        for(int i=1;i<=h;i++){
+            int s_mid = i;
+            int j_mid = h - s_mid + 1;
+
+            int s_count = lowerBound(s_mid, s);
+            int j_count = lowerBound(j_mid, j);
+
+            if((s_count + j_count) < min){
+                min = s_count + j_count;
+                answer = 1;
+            }else if((s_count + j_count) == min){
+                answer++;
+            }
+        }
+
+        System.out.println(min + " " + answer);
     }
+
+
+    public static int lowerBound(int target, int[] arr){
+        int left = 0;
+        int right = arr.length;
+
+        while(left<right){
+            int mid = (left + right)/2;
+
+            if(arr[mid]>=target){
+                right = mid;
+            }else{
+                left = mid+1;
+            }
+        }
+
+        if(left == arr.length){
+            return 0;
+        }
+        return arr.length-left;
+    }
+
 }
