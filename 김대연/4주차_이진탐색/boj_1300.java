@@ -10,20 +10,20 @@ class Main {
         int matrixSize = Integer.parseInt(bufferedReader.readLine());
         int targetIndex = Integer.parseInt(bufferedReader.readLine());
 
-        long left = 1;
-        long right = (long) matrixSize * matrixSize;
+        long lcur = 1;
+        long rcur = (long) matrixSize * matrixSize;
         long result = 0;
 
-        while (left <= right) {
-            long midValue = (left + right) / 2;
+        while (lcur <= rcur) {
+            long midValue = (lcur + rcur) / 2;
 
             long count = countLessOrEqual(matrixSize, midValue);
 
             if (count >= targetIndex) {
                 result = midValue;
-                right = midValue - 1;
+                rcur = midValue - 1;
             } else {
-                left = midValue + 1;
+                lcur = midValue + 1;
             }
         }
 
