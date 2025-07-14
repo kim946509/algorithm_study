@@ -1,94 +1,80 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-    static int[][] board = new int[9][9];
-    static List<int[]> emptyCells = new ArrayList<>();
-    
+class Main {
+    public static int[][] list;
+    public static boolean[] check_list;
+    public static ArrayList<Integer> blank_list = new ArrayList<>();
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        
-        for (int i = 0; i < 9; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < 9; j++) {
-                board[i][j] = Integer.parseInt(st.nextToken());
-                if (board[i][j] == 0) {
-                    emptyCells.add(new int[]{i, j});
-                }
-            }
-        }
-        
 
-        solveSudoku(0);
-        
-        
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                sb.append(board[i][j]).append(" ");
+        list = new int[10][10];
+
+        //입력
+        for(int i=1;i<=9;i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for(int j=1;j<=9;j++){
+                list[i][j] = Integer.parseInt(st.nextToken());
             }
-            sb.append("\n");
         }
-        System.out.print(sb);
+
+        sudoku(1, 1);
+
     }
     
-    static boolean solveSudoku(int idx) {
-        
-        if (idx == emptyCells.size()) {
+    public static boolean sudoku(int x, int y){ 
+    
+        if(y>9){
+            return sudoku(x+1, 1);
+        }
+
+        if(x>9){
+            for(int a=1;a<=9;a++){
+                for(int b=1;b<=9;b++){
+                    System.out.print(list[a][b] + " ");
+                }
+                System.out.println();
+            }
             return true;
         }
-        
-        int[] cell = emptyCells.get(idx);
-        int row = cell[0];
-        int col = cell[1];
-        
-        for (int num = 1; num <= 9; num++) {
-            if (isValid(row, col, num)) {
-                board[row][col] = num;
-                
-                
-                if (solveSudoku(idx + 1)) {
-                    return true;
-                }
-                
-                board[row][col] = 0;
+
+        if(list[x][y] != 0){
+            return sudoku(x,y+1);
+        }
+
+        for(int i=1;i<=9;i++){
+            if(check_sudoku(x, y, i)){
+                list[x][y] = i;
+                if(sudoku(x, y+1)) return true;
+                list[x][y] = 0;
             }
         }
-        
+
         return false;
     }
     
-    static boolean isValid(int row, int col, int num) {
-        
-        for (int j = 0; j < 9; j++) {
-            if (board[row][j] == num) {
-                return false;
+    public static boolean check_sudoku(int x, int y, int num){
+        //가로 행에 대해서 해당 값이 존재하는지 검사
+        for(int i=1; i<=9; i++){
+            if(list[x][i]==num) return false;
+        }
+
+        //세로 행에 대해서 해당 값이 존재하는지 검사
+        for(int i=1; i<=9; i++){
+            if(list[i][y]==num) return false;
+        }
+
+        //3X3 칸에서 해당 값이 존재하는지 검사
+        int x_value = (int) (x/3.5);
+        int y_value = (int) (y/3.5);
+
+        for(int i=x_value*3+1; i<=x_value*3+3; i++){
+            for(int j=y_value*3+1; j<=y_value*3+3; j++){
+                if(list[i][j] == num) return false;
             }
         }
-        
-        
-        for (int i = 0; i < 9; i++) {
-            if (board[i][col] == num) {
-                return false;
-            }
-        }
-        
-        
-        int startRow = row - row % 3;
-        int startCol = col - col % 3;
-        for (int i = startRow; i < startRow + 3; i++) {
-            for (int j = startCol; j < startCol + 3; j++) {
-                if (board[i][j] == num) {
-                    return false;
-                }
-            }
-        }
-        
-        return true;
+
+        return true; //모두 테스트를 통과하면 true 반환
     }
 }
