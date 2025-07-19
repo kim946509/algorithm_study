@@ -51,7 +51,6 @@ class Main {
                     q.offer(new Node(list.get(idx).get(i).getIndex(), cost));
                 }
             }
-
         }
     }
 
