@@ -25,7 +25,6 @@
     <td>언어</td>
     <td>
         <img src="https://img.shields.io/badge/Java-3776AB?style=for-the-badge&logo=java&logoColor=white">
-        <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=java&logoColor=white">
     </td>
   </tr>
 </table>
