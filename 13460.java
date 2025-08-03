@@ -69,7 +69,10 @@ class Main {
                 if (board[nextBlue[0]][nextBlue[1]] == 'O') continue;
 
                 // 빨간 구슬이 구멍에 빠지면 성공
-                if (board[nextRed[0]][nextRed[1]] == 'O') return curr.moves + 1;
+                if (board[nextRed[0]][nextRed[1]] == 'O') {
+                    if(curr.moves + 1 > 10) return -1;
+                    return curr.moves + 1;
+                }
 
                 // 구슬이 같은 위치에 있을 경우 위치 조정
                 if (nextRed[0] == nextBlue[0] && nextRed[1] == nextBlue[1]) {
