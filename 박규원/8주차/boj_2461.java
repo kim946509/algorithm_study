@@ -1,72 +1,76 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-    static class Student implements Comparable<Student> {
-        int value; // 능력치
-        int classIdx; // 학급 번호
+class Main {
+    public static class Student implements Comparable<Student>{
+        int class_idx;
+        int ability;
 
-        Student(int value, int classIdx) {
-            this.value = value;
-            this.classIdx = classIdx;
+        public Student(int class_idx, int ability){
+            this.class_idx = class_idx;
+            this.ability = ability;
+        }
+
+        public int getClasses(){
+            return this.class_idx;
+        }
+
+        public int getAbility(){
+            return this.ability;
         }
 
         @Override
-        public int compareTo(Student other) {
-            return Integer.compare(this.value, other.value);
+        public int compareTo(Student student){
+            return Integer.compare(this.ability, student.getAbility());
         }
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        int N = Integer.parseInt(st.nextToken()); // 학급 수
-        int M = Integer.parseInt(st.nextToken()); // 각 학급의 학생 수
-        
-        // 모든 학생을 하나의 리스트에 저장
-        List<Student> students = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
+
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+
+        ArrayList<Student> list = new ArrayList<>();
+
+        //입력 받기
+        for(int i=0;i<n;i++){
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                int value = Integer.parseInt(st.nextToken());
-                students.add(new Student(value, i));
+            for(int j=0;j<m;j++){
+                list.add(new Student(i, Integer.parseInt(st.nextToken())));
             }
         }
-        
-        // 능력치 기준으로 정렬
-        Collections.sort(students);
-        
-        // 슬라이딩 윈도우를 위한 변수
-        int[] classCount = new int[N]; // 각 학급에서 선택된 학생 수
-        int uniqueClasses = 0; // 윈도우 내 선택된 학급 수
-        int minDiff = Integer.MAX_VALUE;
-        
+
+        Collections.sort(list);
+
+        int[] current_class = new int[n];
+        int total_student = 0;
+
         int left = 0;
-        for (int right = 0; right < students.size(); right++) {
-            // 오른쪽 포인터에서 학생 추가
-            int classIdx = students.get(right).classIdx;
-            classCount[classIdx]++;
-            if (classCount[classIdx] == 1) {
-                uniqueClasses++;
+        int min_diff = Integer.MAX_VALUE;
+
+        for(int right =0; right<list.size();right++){
+            int class_idx = list.get(right).getClasses();
+
+            current_class[class_idx]++;
+            if(current_class[class_idx] == 1){
+                total_student++;
             }
-            
-            // 모든 학급에서 한 명 이상 선택된 경우
-            while (uniqueClasses == N) {
-                // 현재 윈도우의 능력치 차이 계산
-                int diff = students.get(right).value - students.get(left).value;
-                minDiff = Math.min(minDiff, diff);
-                
-                // 왼쪽 포인터 이동
-                int leftClassIdx = students.get(left).classIdx;
-                classCount[leftClassIdx]--;
-                if (classCount[leftClassIdx] == 0) {
-                    uniqueClasses--;
+
+            while(total_student == n){
+                int diff = list.get(right).getAbility() - list.get(left).getAbility();
+                min_diff = Math.min(diff, min_diff);
+
+                current_class[list.get(left).getClasses()]--;
+                if(current_class[list.get(left).getClasses()] == 0){
+                    total_student--;
                 }
                 left++;
             }
         }
-        
-        System.out.println(minDiff);
+
+        System.out.println(min_diff);
     }
 }
